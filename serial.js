@@ -1,7 +1,7 @@
 
 // Util
 function trim(str) {
-  return str.replace(/^\s+|\s+$/g,"");
+	return str.replace(/^\s+|\s+$/g,"");
 }
 
 // Config
@@ -16,7 +16,7 @@ var io = require('socket.io').listen(server);
 console.log("Listening on port " + WEB_PORT);
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+	res.sendfile(__dirname + '/index.html');
 });
 
 // Configura Puerto Serial
@@ -38,7 +38,7 @@ serialPort.on("open", function (data) {
 
 serialPort.on("data", function (data) {
 	data = trim(data);
-	console.log("   DEV >- " + data);
+	console.log("	 DEV >- " + data);
 	io.sockets.emit('toBrowser', data);
 });
 
