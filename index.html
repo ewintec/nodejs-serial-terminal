@@ -1,0 +1,154 @@
+<html>
+
+	<head>
+		<title>Rinho Cx - Terminal</title>
+		<script src="/socket.io/socket.io.js"></script>
+		<style>
+			#toBrowser-div a {
+				font-family: "Consolas", "Courier New"
+			}
+			.activa { font-weight: bold; border: 5px; background-color: #ddd; }			
+		</style>
+	</head>
+	
+	<body>
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <!--Sidebar content-->
+    </div>
+    <div class="span10">
+      <!--Body content-->
+    </div>
+  </div>
+</div>
+
+		<div class="container-fluid">
+
+		<div class="row-fluid">
+
+	
+			<nav class="navbar navbar-default" role="navigation">
+			  <div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<!--
+				<div class="navbar-header">
+				  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand" href="#">Terminal</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				  <form class="navbar-form navbar-left">
+					<div class="form-group">
+					  <input type="text" class="form-control" placeholder="Ingrese el comando" id="menssageToServer" value=">QIO<">
+					</div>
+					<button type="submit" class="btn btn-default" id="btnEnviar">Enviar</button>
+				  </form>
+
+				  <ul class="nav navbar-nav">
+					<li class="activef"><a href="#" id="btnLimpiar">Limpiar</a></li>
+					<!--
+					<li class="dropdown">
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+					  <ul class="dropdown-menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+						<li class="divider"></li>
+						<li><a href="#">One more separated link</a></li>
+					  </ul>
+					</li>
+					-->
+				  </ul>
+				  <!--
+				  <ul class="nav navbar-nav navbar-right">
+					<li><a href="#">Link</a></li>
+					<li class="dropdown">
+					  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+					  <ul class="dropdown-menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					  </ul>
+					</li>
+				  </ul>
+				  -->
+				</div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+			
+			<!-- 
+			<form class="form-inline" role="form">
+			<div class="form-group">
+				<input class="form-control" placeholder="Ingrese el comando" id="menssageToServer" value=">QIO<"/>
+				<button type="submit" class="btn btn-default" id="btnEnviar">Enviar</button>
+				<button class="btn btn-default" id="btnLimpiar">Limpiar</button>
+			</div>
+			</form>
+			-->
+			
+			<ul id='toBrowser-div' class="highlight list-group panel panel-default" style="overflow: auto; height: calc(100% - 95px); padding: 5px;"></ul>
+			
+		</div>
+		
+		</DIV>
+
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script>
+		
+		  var socket = io.connect('http://localhost:3000');
+		  socket.on('toBrowser', function (data) {
+			$('#toBrowser-div').append("<a class='list-group-item list-group-item-success'>" + data + "</a>"); 
+			toBottom();
+			console.log(data);
+		  });
+		  
+		  function toBottom() { 
+			$('#toBrowser-div').scrollTop($('#toBrowser-div')[0].scrollHeight);
+			$('#toBrowser-div a').removeClass("activa");
+			$('#toBrowser-div a').last().addClass("activa");			
+			$('#toBrowser-div a').click(function() {
+				$('#toBrowser-div a').removeClass("activa");
+				$(this).addClass("activa");
+			});			
+		  }
+		  
+		  $(document).ready(function() {
+		  
+			$('#btnEnviar').click(function(e){
+				e.preventDefault();
+				var msg = $('#menssageToServer').val();
+				socket.emit('toServer', { 'msg' : msg });
+				$('#toBrowser-div').append("<a class='list-group-item list-group-item-warning'>" + msg + "</a>");
+				toBottom();
+			});
+			
+			$('#btnLimpiar').click(function(e){
+				e.preventDefault();
+				$('#toBrowser-div a').fadeOut("fast", function() {
+					$(this).remove();
+				});
+				console.log("eliminar lis");
+			});			
+			
+		  });
+		  
+		</script>
+	</body>
+	
+</html>
